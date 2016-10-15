@@ -10,6 +10,53 @@
 
 #include "RotaryEncoderArduino101.h"
 
+encoderPos_t const encoderPos_min = 0L;
+encoderPos_t const encoderPos_max = 99999999L;
+
+class Interrupt {
+public:
+	static void registr(uint8_t const pinNr, Interrupt* intHandlerThis, uint32_t const mode);
+	//static void deregistr(uint8_t const pinNr, Interrupt * intHandlerThis);
+	static void isr0(void);  // wrapper functions to isr()
+	static void isr1(void);
+	static void isr2(void);
+	static void isr3(void);
+	static void isr4(void);
+	static void isr5(void);  // number of isrX() should match MAX_INTERRUPTS
+	virtual void isr(void) = 0;
+private:
+	static Interrupt * isrVectorTable[MAX_INTERRUPTS];  // needs to be defined in .cpp file!!
+};
+
+class RotaryEncoder; // forward declaration
+
+class RotaryEncoderInterruptA : public Interrupt
+{
+public:
+	RotaryEncoderInterruptA(uint8_t const intnr, RotaryEncoder* ownerptr);
+	void isr(void);
+private:
+	RotaryEncoder * owner;
+};
+
+class RotaryEncoderInterruptB : public Interrupt
+{
+public:
+	RotaryEncoderInterruptB(uint8_t const intnr, RotaryEncoder* ownerptr);
+	void isr(void);
+private:
+	RotaryEncoder * owner;
+};
+
+class RotaryEncoderInterruptP : public Interrupt
+{
+public:
+	RotaryEncoderInterruptP(uint8_t const intnr, RotaryEncoder* ownerptr);
+	void isr(void);
+private:
+	RotaryEncoder * owner;
+};
+
 typedef void(*isrFnc_t)(void);
 
 void Interrupt::registr(uint8_t const pinNr, Interrupt * intHandlerThis, uint32_t const mode_)
@@ -112,7 +159,7 @@ RotaryEncoderInterruptA::isr(void)
 		bool aInDetent = digitalRead(owner->pinA);
 		bool bInDetent = digitalRead(owner->pinB);
 		if (aInDetent && bInDetent && owner->expectRisingEdgeOnPinA) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-			encoderPos_t const delta = owner->delta(increment);
+			encoderPos_t const delta = owner->delta(owner->increment);
 			encoderPos_t const pos = owner->encoderPos;
 			if (pos < encoderPos_min + delta) {
 				owner->encoderPos = encoderPos_min;
@@ -137,7 +184,7 @@ RotaryEncoderInterruptB::isr(void)
 		bool aInDetent = digitalRead(owner->pinA);
 		bool bInDetent = digitalRead(owner->pinB);
 		if (aInDetent && bInDetent && owner->expectRisingEdgeOnPinB) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-			encoderPos_t const delta = owner->delta(decrement);
+			encoderPos_t const delta = owner->delta(owner->decrement);
 			encoderPos_t const pos = owner->encoderPos;
 			if (pos + delta > encoderPos_max) {
 				owner->encoderPos = encoderPos_max;
