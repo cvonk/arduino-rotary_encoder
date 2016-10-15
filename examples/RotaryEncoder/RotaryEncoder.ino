@@ -8,8 +8,8 @@
 
 #include <RotaryEncoderArduino101.h>
 
-RotaryEncoder * rotEncoder1;
-RotaryEncoder * rotEncoder2;
+RotaryEncoder rotEncoder1(4, 5, 6, false);
+RotaryEncoder rotEncoder2(7, 8, 9);
 
 void setup()
 {
@@ -20,21 +20,19 @@ void setup()
 	delay(50);
 	Serial.println("RotaryEncoder");
 
-	rotEncoder1 = new RotaryEncoder(4, 5, 6, false);
-	rotEncoder2 = new RotaryEncoder(7, 8, 9);
-	rotEncoder1->begin();
-	rotEncoder2->begin();
+	rotEncoder1.begin();
+	rotEncoder2.begin();
 }
 
 void loop()
 {
 	uint8_t const nrEncoders = 2;
 
-	static encoderPos_t lastEncPos[nrEncoders] = { rotEncoder1->getPosition(), rotEncoder2->getPosition() };
-	static bool lastPushed[nrEncoders] = { rotEncoder1->isPushed(), rotEncoder2->isPushed() };
+	static encoderPos_t lastEncPos[nrEncoders] = { rotEncoder1.getPosition(), rotEncoder2.getPosition() };
+	static bool lastPushed[nrEncoders] = { rotEncoder1.isPushed(), rotEncoder2.isPushed() };
 
-	encoderPos_t const pos[nrEncoders] = { rotEncoder1->getPosition(), rotEncoder2->getPosition() };
-	bool const pushed[nrEncoders] = { rotEncoder1->isPushed(), rotEncoder2->isPushed() };
+	encoderPos_t const pos[nrEncoders] = { rotEncoder1.getPosition(), rotEncoder2.getPosition() };
+	bool const pushed[nrEncoders] = { rotEncoder1.isPushed(), rotEncoder2.isPushed() };
 
 	for (uint8_t ii = 0; ii < nrEncoders; ii++) {
 

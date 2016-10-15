@@ -172,14 +172,14 @@ RotaryEncoder::RotaryEncoder(uint8_t const pinP_,
 {
 	expectRisingEdgeOnPinA = true;
 	expectRisingEdgeOnPinB = true;
-	InterruptPtrA = new RotaryEncoderInterruptA(pinA_, this);
-	InterruptPtrB = new RotaryEncoderInterruptB(pinB_, this);
-	InterruptPtrP = new RotaryEncoderInterruptP(pinP_, this);
 }
 
 void
 RotaryEncoder::begin(void)
 {
+	InterruptPtrA = new RotaryEncoderInterruptA(pinA, this);
+	InterruptPtrB = new RotaryEncoderInterruptB(pinB, this);
+	InterruptPtrP = new RotaryEncoderInterruptP(pinP, this);
 }
 
 encoderPos_t
