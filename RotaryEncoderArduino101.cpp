@@ -10,6 +10,7 @@
 
 #include "RotaryEncoderArduino101.h"
 
+uint8_t const maxInterrupts = 6;
 encoderPos_t const encoderPos_min = 0L;
 encoderPos_t const encoderPos_max = 99999999L;
 
@@ -22,10 +23,10 @@ public:
 	static void isr2(void);
 	static void isr3(void);
 	static void isr4(void);
-	static void isr5(void);  // number of isrX() should match MAX_INTERRUPTS
+	static void isr5(void);  // number of isrX() should match maxInterrupts
 	virtual void isr(void) = 0;
 private:
-	static Interrupt * isrVectorTable[MAX_INTERRUPTS];  // needs to be defined in .cpp file!!
+	static Interrupt * isrVectorTable[maxInterrupts];  // needs to be defined in .cpp file!!
 };
 
 class RotaryEncoder; // forward declaration
@@ -61,7 +62,7 @@ typedef void(*isrFnc_t)(void);
 
 void Interrupt::registr(uint8_t const pinNr, Interrupt * intHandlerThis, uint32_t const mode_)
 {
-	for (uint8_t ii = 0; ii < MAX_INTERRUPTS; ii++) {
+	for (uint8_t ii = 0; ii < maxInterrupts; ii++) {
 		if (isrVectorTable[ii] == NULL) {
 			isrVectorTable[ii] = intHandlerThis;
 			isrFnc_t fnc;
@@ -71,7 +72,7 @@ void Interrupt::registr(uint8_t const pinNr, Interrupt * intHandlerThis, uint32_
 				case 2: fnc = isr2; break;
 				case 3: fnc = isr3; break;
 				case 4: fnc = isr4; break;
-				case 5: fnc = isr5; break; // should match MAX_INTERRUPTS
+				case 5: fnc = isr5; break; // should match maxInterrupts
 				default: fnc = NULL;
 			}
 			if (fnc) {
@@ -85,7 +86,7 @@ void Interrupt::registr(uint8_t const pinNr, Interrupt * intHandlerThis, uint32_
 #if 0
 void Interrupt::deregistr(uint8_t const pinNr, Interrupt * intHandlerThis)
 {
-	for (uint8_t ii = 0; ii < MAX_INTERRUPTS; ii++) {
+	for (uint8_t ii = 0; ii < maxInterrupts; ii++) {
 		if (isrVectorTable[ii] == intHandlerThis) {
 			isrVectorTable[ii] = NULL;
 			detachInterrupt(pinNr);
@@ -102,7 +103,7 @@ void Interrupt::isr4(void) { isrVectorTable[4]->isr(); }
 void Interrupt::isr5(void) { isrVectorTable[5]->isr(); }
 
 // definitions for static class variable (if you forget, .. you get odd linker errors)
-Interrupt * Interrupt::isrVectorTable[MAX_INTERRUPTS];
+Interrupt * Interrupt::isrVectorTable[maxInterrupts];
 
 RotaryEncoderInterruptA::RotaryEncoderInterruptA(uint8_t const pinNr_, RotaryEncoder* owner_)
 {

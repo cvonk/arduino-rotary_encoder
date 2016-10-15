@@ -1,8 +1,6 @@
 #pragma once
 #include <Arduino.h>
 
-#define MAX_INTERRUPTS (6)
-
 typedef uint64_t encoderPos_t;
 
 class RotaryEncoderInterruptA;
@@ -16,8 +14,11 @@ class RotaryEncoder
 	friend class RotaryEncoderInterruptP;
 
   public:
+	  // constructor and begin function  
 	RotaryEncoder(uint8_t const pinA_, uint8_t const pinB_, uint8_t const pinP_, bool const lineair_ = true);
 	void begin(void);
+
+      // return the current state
 	encoderPos_t getPosition(void);
 	bool isPushed(void);
 
