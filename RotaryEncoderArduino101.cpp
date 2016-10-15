@@ -78,15 +78,47 @@ RotaryEncoderInterruptP::RotaryEncoderInterruptP(uint8_t const pinNr_, RotaryEnc
 	Interrupt::registr(pinNr_, this, CHANGE);
 }
 
+encoderPos_t
+RotaryEncoder::delta(encoderPosDir_t const requestedDirection)
+{
+	if (lineair) {
+		return 1;
+	}
+
+	uint64_t const now = millis();
+	uint64_t diff = now - nonLineair.lastTime;
+
+    // ignore spurious direction changes when turning very quickly
+	// (probably caused by missed interrupts)
+	if (requestedDirection != nonLineair.direction && diff < 100) {
+		return 0;
+	}
+	nonLineair.direction = requestedDirection;
+
+	encoderPos_t scale = 1;
+	while (diff < 200 && scale < encoderPos_max / 10) {
+		scale *= 7;
+		diff <<= 1;
+	}
+	nonLineair.lastTime = now;
+	return scale;
+}
+
 void
 RotaryEncoderInterruptA::isr(void)
 {
-	noInterrupts();
+	//noInterrupts();  not needed, 'cause caller already masked IRQ
 	{
 		bool aInDetent = digitalRead(owner->pinA);
 		bool bInDetent = digitalRead(owner->pinB);
 		if (aInDetent && bInDetent && owner->expectRisingEdgeOnPinA) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-			owner->encoderPos--;
+			encoderPos_t const delta = owner->delta(increment);
+			encoderPos_t const pos = owner->encoderPos;
+			if (pos < encoderPos_min + delta) {
+				owner->encoderPos = encoderPos_min;
+			} else {
+				owner->encoderPos = pos - delta;
+			}
 			owner->expectRisingEdgeOnPinB = false;
 			owner->expectRisingEdgeOnPinA = false;
 		}
@@ -94,18 +126,24 @@ RotaryEncoderInterruptA::isr(void)
 			owner->expectRisingEdgeOnPinB = true;  // we're expecting pinB to signal the transition to detent from free rotation
 		}
 	}
-	interrupts();
+	//interrupts();  not needed, 'cause caller already masked IRQ
 }
 
 void
 RotaryEncoderInterruptB::isr(void)
 {
-	noInterrupts();
+	//noInterrupts();  not needed, 'cause caller already masked IRQ
 	{
 		bool aInDetent = digitalRead(owner->pinA);
 		bool bInDetent = digitalRead(owner->pinB);
 		if (aInDetent && bInDetent && owner->expectRisingEdgeOnPinB) { //check that we have both pins at detent (HIGH) and that we are expecting detent on this pin's rising edge
-			owner->encoderPos++;
+			encoderPos_t const delta = owner->delta(decrement);
+			encoderPos_t const pos = owner->encoderPos;
+			if (pos + delta > encoderPos_max) {
+				owner->encoderPos = encoderPos_max;
+			} else {
+				owner->encoderPos = pos + delta;
+			}
 			owner->expectRisingEdgeOnPinB = false;
 			owner->expectRisingEdgeOnPinA = false;
 		}
@@ -113,23 +151,24 @@ RotaryEncoderInterruptB::isr(void)
 			owner->expectRisingEdgeOnPinA = true;
 		}
 	}
-	interrupts();
+	//interrupts();  not needed, 'cause caller already masked IRQ
 }
 
 void
 RotaryEncoderInterruptP::isr()
 {
-	noInterrupts();
+	//noInterrupts();  not needed, 'cause caller already masked IRQ
 	{
 		owner->pushed = !digitalRead(owner->pinP);
 	}
-	interrupts();
+	//interrupts();  not needed, 'cause caller already masked IRQ
 }
 
 RotaryEncoder::RotaryEncoder(uint8_t const pinP_,
 							 uint8_t const pinA_,
-							 uint8_t const pinB_)
-	: pinP(pinP_), pinA(pinA_), pinB(pinB_)
+							 uint8_t const pinB_,
+							 bool const lineair_)
+	: pinP(pinP_), pinA(pinA_), pinB(pinB_), lineair(lineair_)
 {
 	expectRisingEdgeOnPinA = true;
 	expectRisingEdgeOnPinB = true;

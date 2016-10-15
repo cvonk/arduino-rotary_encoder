@@ -3,7 +3,10 @@
 
 #define MAX_INTERRUPTS (6)
 
-typedef uint32_t encoderPos_t;
+typedef uint64_t encoderPos_t;
+encoderPos_t const encoderPos_min = 0L;
+encoderPos_t const encoderPos_max = 99999999L;
+typedef enum {increment, decrement} encoderPosDir_t;
 
 class Interrupt {
 public:
@@ -55,7 +58,7 @@ class RotaryEncoder
 	friend class RotaryEncoderInterruptB;
 	friend class RotaryEncoderInterruptP;
   public:
-	RotaryEncoder(uint8_t const pinA_, uint8_t const pinB_, uint8_t const pinP_);
+	RotaryEncoder(uint8_t const pinA_, uint8_t const pinB_, uint8_t const pinP_, bool const lineair_ = true);
 	void begin(void);
 	encoderPos_t getPosition(void);
 	bool isPushed(void);
@@ -70,4 +73,10 @@ class RotaryEncoder
 	bool expectRisingEdgeOnPinB;
 	volatile bool pushed;
 	volatile encoderPos_t encoderPos = 0;
+	encoderPos_t delta(encoderPosDir_t const requestedDirection);
+	bool const lineair;
+	struct {
+		uint64_t lastTime;
+		encoderPosDir_t direction;
+	} nonLineair;
 };

@@ -20,7 +20,7 @@ void setup()
 	delay(50);
 	Serial.println("RotaryEncoder");
 
-	rotEncoder1 = new RotaryEncoder(4, 5, 6);
+	rotEncoder1 = new RotaryEncoder(4, 5, 6, false);
 	rotEncoder2 = new RotaryEncoder(7, 8, 9);
 	rotEncoder1->begin();
 	rotEncoder2->begin();
