@@ -8,8 +8,12 @@
 
 #include <RotaryEncoderArduino101.h>
 
-RotaryEncoder rotEncoder1(4, 5, 6, false);
-RotaryEncoder rotEncoder2(7, 8, 9);
+uint8_t const nrEncoders = 2;
+
+RotaryEncoder rotEncoder[nrEncoders] = {
+	RotaryEncoder(4, 5, 6, false),
+	RotaryEncoder(7, 8, 9)
+};
 
 void setup()
 {
@@ -20,36 +24,40 @@ void setup()
 	delay(50);
 	Serial.println("RotaryEncoder");
 
-	rotEncoder1.begin();
-	rotEncoder2.begin();
+	for (uint8_t ii = 0; ii < nrEncoders; ii++) {
+		rotEncoder[ii].begin();
+	}
 }
 
 void loop()
 {
-	uint8_t const nrEncoders = 2;
+	typedef struct {
+		encoderPos_t pos;
+		bool pushed;
+	} encoderState_t;
 
-	static encoderPos_t lastEncPos[nrEncoders] = { rotEncoder1.getPosition(), rotEncoder2.getPosition() };
-	static bool lastPushed[nrEncoders] = { rotEncoder1.isPushed(), rotEncoder2.isPushed() };
+	static encoderState_t lastArr[nrEncoders];
 
-	encoderPos_t const pos[nrEncoders] = { rotEncoder1.getPosition(), rotEncoder2.getPosition() };
-	bool const pushed[nrEncoders] = { rotEncoder1.isPushed(), rotEncoder2.isPushed() };
+	encoderState_t * last = lastArr;
+	for (uint8_t ii = 0; ii < nrEncoders; ii++, last++) {
 
-	for (uint8_t ii = 0; ii < nrEncoders; ii++) {
-
-		if ((lastEncPos[ii] != pos[ii])) {
+		encoderState_t const current = {
+			.pos = rotEncoder[ii].getPosition(),
+			.pushed = rotEncoder[ii].isPushed(),
+		};
+		if ((last->pos != current.pos)) {
 			if (Serial.availableForWrite() > 60) {
 				Serial.print(ii); Serial.print(" ");
-				Serial.println(pos[ii], DEC);
+				Serial.println(current.pos, DEC);
 			}
-			lastEncPos[ii] = pos[ii];
+			last->pos = current.pos;
 		}
-
-		if ((lastPushed[ii] != pushed[ii])) {
+		if ((last->pushed != current.pushed)) {
 			if (Serial.availableForWrite() > 60) {
 				Serial.print(ii); Serial.print(" ");
-				Serial.println(pushed[ii] ? "pushed" : "released");
+				Serial.println(current.pushed ? "pushed" : "released");
 			}
-			lastPushed[ii] = pushed[ii];
+			last->pushed = current.pushed;
 		}
 	}
 }
