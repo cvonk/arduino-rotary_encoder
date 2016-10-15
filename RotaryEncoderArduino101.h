@@ -22,18 +22,27 @@ class RotaryEncoder
 	bool isPushed(void);
 
   private:
+	  // parameters
 	uint8_t const pinP;
 	uint8_t const pinA;
 	uint8_t const pinB;
 	bool const lineair;
+    
+	  // instantiated child classes
 	RotaryEncoderInterruptA * InterruptPtrA;
 	RotaryEncoderInterruptB * InterruptPtrB;
 	RotaryEncoderInterruptP * InterruptPtrP;
+
+	  // state about what we're expecting
 	bool expectRisingEdgeOnPinA;
 	bool expectRisingEdgeOnPinB;
+
+	  // current state
 	volatile bool pushed;
 	volatile encoderPos_t encoderPos = 0;
 	typedef enum { increment, decrement } encoderPosDir_t;
+
+	  // calculates the number of positions to change
 	encoderPos_t delta(encoderPosDir_t const requestedDirection);
 	struct {
 		uint64_t lastTime;
