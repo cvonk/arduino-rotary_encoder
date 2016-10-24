@@ -1,4 +1,4 @@
-# Rotary Encoder for Arduino101
+# Rotary Encoder for Arduino101  [![Build Status](https://travis-ci.org/cvonk/arduino-rotary_encoder.svg?branch=master)](https://travis-ci.org/cvonk/arduino-rotary_encoder/builds/170003121#)
 ##Using interrupts and allowing multiple instances
 
 This library supports rotary encoders connected to the Arduino/Genuino 101.  It should work for other microcontrollers for as long as they can generate the necessary interrupts.
