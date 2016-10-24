@@ -1,4 +1,4 @@
-# configuration file for Travis Cl
+# configuration file for Travis CI
 # 2016, Coert Vonk
 
 language: generic
@@ -23,10 +23,10 @@ before_install:
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
   - mv arduino-$IDE_VERSION $HOME/arduino-ide
   - export PATH=$PATH:$HOME/arduino-ide  
-  - arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs;
+  - arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
   - wget http://downloads.arduino.cc/libraries/library_index.json -O $HOME/.arduino15/library_index.json
   - if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
-      arduino --install-boards arduino:samd;
+      arduino --install-boards esp8266:esp8266;
     fi
   - if [[ "$BOARD" =~ "Intel:arc32:" ]]; then
       arduino --install-boards Intel:arc32;
