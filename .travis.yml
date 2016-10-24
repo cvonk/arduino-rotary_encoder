@@ -6,8 +6,8 @@ env:
   global:
     - IDE_VERSION=1.6.12
   matrix:
-    - SKETCH="alarm_clock" BOARD="Intel:arc32:arduino_101"
-    - SKETCH="alarm_clock" BOARD="avr:arduino:uno"
+    - SKETCH="RotaryEncoder" BOARD="Intel:arc32:arduino_101"
+    - SKETCH="RotaryEncoder" BOARD="avr:arduino:uno"
 
 before_install:
   - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
