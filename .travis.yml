@@ -1,7 +1,7 @@
 # configuration file for Travis Cl
 # 2016, Coert Vonk
 
-language: c
+language: generic
 env:
   global:
     - IDE_VERSION=1.6.12
@@ -10,6 +10,10 @@ env:
     - BOARD="Intel:arc32:arduino_101"
     - BOARD="arduino:avr:uno"
     - BOARD="esp8266:esp8266:huzzah"
+
+matrix:
+  allow_failures:
+    - env: BOARD="esp8266:esp8266:huzzah"
 
 before_install:
   - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
@@ -27,8 +31,19 @@ before_install:
   - if [[ "$BOARD" =~ "Intel:arc32:" ]]; then
       arduino --install-boards Intel:arc32;
     fi
-  - buildExampleSketch() { arduino --verbose-build --verify --board $BOARD $PWD/examples/$1/$1.ino; }
-  - buildSketch() { arduino --verbose-build --verify --board $BOARD $PWD/$1/$1.ino; }
+  - findAndReplace() { sed -i'' -e"s|$1|$2|g" "$3"; }
+  - buildExampleSketch() { 
+      EXAMPLE_SKETCH=$PWD/examples/$1/$1.ino;
+      if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
+        findAndReplace WiFi101 ESP8266WiFi $EXAMPLE_SKETCH;
+        findAndReplace WiFiSSLClient WiFiClientSecure $EXAMPLE_SKETCH;
+      fi
+      cat $EXAMPLE_SKETCH;
+      arduino --verbose-build --verify --board $BOARD $EXAMPLE_SKETCH; 
+    }
+  - buildSketch() { 
+        arduino --verbose-build --verify --board $BOARD $PWD/$1/$1.ino; 
+    }
 
 install:
 #  - arduino --install-library "Adafruit SSD1306"
@@ -38,7 +53,7 @@ install:
   - ln -s $PWD $HOME/Arduino/libraries/.
 
 script:
-  - arduino --verbose-build --verify --board $BOARD $PWD/examples/RotaryEncoder/RotaryEncoder.ino 
+  - buildExampleSketch RotaryEncoder
 
 notifications:
   email:
