@@ -33,5 +33,5 @@ install:
   - ln -s $PWD $HOME/Arduino/libraries/.
 
 script:
-  - echo arduino --verify --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
-  - arduino --verify --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
+  - echo arduino --verify -v --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
+  - arduino --verify -v --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
