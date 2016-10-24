@@ -26,11 +26,12 @@ before_install:
   - wget http://downloads.arduino.cc/libraries/library_index.json -O $HOME/.arduino15/library_index.json
 
 install:
-  - arduino --install-library "Adafruit SSD1306"
-  - arduino --install-library "Adafruit GFX Library"
+  - # arduino --install-library "Adafruit SSD1306"
+  - # arduino --install-library "Adafruit GFX Library"
   - # git clone https://github.com/cvonk/esp8266-WiFiClientSecureRedirect.git $HOME/Arduino/libraries/esp8266-WiFiClientSecureRedirect
   - mkdir -p $HOME/Arduino/libraries/
   - ln -s $PWD $HOME/Arduino/libraries/.
 
 script:
+  - echo arduino --verify --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
   - arduino --verify --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
