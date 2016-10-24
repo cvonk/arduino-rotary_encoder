@@ -11,7 +11,7 @@ env:
     - BOARD="avr:arduino:uno"
     - BOARD="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80"
 
-matrix
+matrix:
   allow_failures:
     - env: esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80
     
