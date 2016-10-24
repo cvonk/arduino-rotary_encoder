@@ -34,5 +34,10 @@ install:
 
 script:
   - # https://github.com/arduino/Arduino/blob/master/build/shared/manpage.adoc
-  - echo arduino --verify -v --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
+  - echo arduino --verify --verbose --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
   - arduino --verify --verbose --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
