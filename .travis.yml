@@ -43,7 +43,7 @@ install:
   - ln -s $PWD $HOME/Arduino/libraries/.
 
 script:
-  - buildExampleSketch $SKETCH
+  - arduino --verbose-build --verify --board $BOARD $PWD/examples/RotaryEncoder/RotaryEncoder.ino 
 
 notifications:
   email:
