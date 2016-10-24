@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 
-typedef uint64_t encoderPos_t;
+typedef uint32_t encoderPos_t;
 
 class RotaryEncoderInterruptA;
 class RotaryEncoderInterruptB;
