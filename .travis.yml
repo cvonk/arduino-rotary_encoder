@@ -1,13 +1,19 @@
-# configuration file for Travis Cl
+# configuration file for Travis CI
 # 2016, Coert Vonk
 
-language: c
+language: generic
 env:
   global:
     - IDE_VERSION=1.6.12
+    - SKETCH="RotaryEncoder" 
   matrix:
-    - SKETCH="RotaryEncoder" BOARD="Intel:arc32:arduino_101"
-    - SKETCH="RotaryEncoder" BOARD="avr:arduino:uno"
+    - BOARD="Intel:arc32:arduino_101"
+    - BOARD="arduino:avr:uno"
+    - BOARD="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80"
+
+matrix:
+  allow_failures:
+    - env: BOARD="esp8266:esp8266:huzzah"
 
 before_install:
   - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16
@@ -17,21 +23,39 @@ before_install:
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
   - mv arduino-$IDE_VERSION $HOME/arduino-ide
   - export PATH=$PATH:$HOME/arduino-ide  
-  - if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
-      arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --install-boards esp8266:esp8266;
-      arduino --pref "boardsmanager.additional.urls=" --save-prefs;
-    fi
-  - arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json" --save-prefs
-  - #mkdir -p $HOME/.arduino15
+  - arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
   - wget http://downloads.arduino.cc/libraries/library_index.json -O $HOME/.arduino15/library_index.json
+  - if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
+      arduino --install-boards esp8266:esp8266;
+    fi
+  - if [[ "$BOARD" =~ "Intel:arc32:" ]]; then
+      arduino --install-boards Intel:arc32;
+    fi
+  - findAndReplace() { sed -i'' -e"s|$1|$2|g" "$3"; }
+  - buildExampleSketch() { 
+      EXAMPLE_SKETCH=$PWD/examples/$1/$1.ino;
+      if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
+        findAndReplace WiFi101 ESP8266WiFi $EXAMPLE_SKETCH;
+        findAndReplace WiFiSSLClient WiFiClientSecure $EXAMPLE_SKETCH;
+      fi;
+      cat $EXAMPLE_SKETCH;
+      arduino --verbose-build --verify --board $BOARD $EXAMPLE_SKETCH; 
+    }
+  - buildSketch() { 
+        arduino --verbose-build --verify --board $BOARD $PWD/$1/$1.ino; 
+    }
 
 install:
-  - # arduino --install-library "Adafruit SSD1306"
-  - # arduino --install-library "Adafruit GFX Library"
-  - # git clone https://github.com/cvonk/esp8266-WiFiClientSecureRedirect.git $HOME/Arduino/libraries/esp8266-WiFiClientSecureRedirect
+#  - arduino --install-library "Adafruit SSD1306"
+#  - arduino --install-library "Adafruit GFX Library"
+#  - git clone https://github.com/cvonk/esp8266-WiFiClientSecureRedirect.git $HOME/Arduino/libraries/esp8266-WiFiClientSecureRedirect
   - mkdir -p $HOME/Arduino/libraries/
   - ln -s $PWD $HOME/Arduino/libraries/.
 
 script:
-  - echo arduino --verify --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
-  - arduino --verify --board $BOARD $PWD/examples/$SKETCH/$SKETCH.ino
+  - buildExampleSketch RotaryEncoder
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
