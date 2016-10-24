@@ -6,7 +6,7 @@
 // (c) 2016 by Coert Vonk (http://www.coertvonk.com)
 // see enclosed LICENSE.txt
 
-#include <RotaryEncoderArduino101.h>
+#include <RotaryEncoder101.h>
 
 uint8_t const nrEncoders = 2;
 

@@ -8,7 +8,7 @@
 // inspired by http://www.embedded.com/design/prototyping-and-development/4023817/Interrupts-in-C-
 //         and http://www.instructables.com/id/Improved-Arduino-Rotary-Encoder-Reading/
 
-#include "RotaryEncoderArduino101.h"
+#include "RotaryEncoder101.h"
 
 uint8_t const maxInterrupts = 6;
 encoderPos_t const encoderPos_min = 0L;
