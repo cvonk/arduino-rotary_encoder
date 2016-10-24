@@ -8,7 +8,7 @@ env:
     - SKETCH="RotaryEncoder" 
   matrix:
     - BOARD="Intel:arc32:arduino_101"
-    - BOARD="avr:arduino:uno"
+    - BOARD="arduino:avr:uno"
     - BOARD="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80"
 
 matrix:
@@ -24,7 +24,6 @@ before_install:
   - mv arduino-$IDE_VERSION $HOME/arduino-ide
   - export PATH=$PATH:$HOME/arduino-ide  
   - arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json,http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs;
-  - #mkdir -p $HOME/.arduino15
   - wget http://downloads.arduino.cc/libraries/library_index.json -O $HOME/.arduino15/library_index.json
   - if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
       arduino --install-boards arduino:samd;
