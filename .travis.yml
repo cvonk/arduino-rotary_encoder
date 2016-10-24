@@ -37,7 +37,7 @@ before_install:
       if [[ "$BOARD" =~ "esp8266:esp8266:" ]]; then
         findAndReplace WiFi101 ESP8266WiFi $EXAMPLE_SKETCH;
         findAndReplace WiFiSSLClient WiFiClientSecure $EXAMPLE_SKETCH;
-      fi
+      fi;
       cat $EXAMPLE_SKETCH;
       arduino --verbose-build --verify --board $BOARD $EXAMPLE_SKETCH; 
     }
