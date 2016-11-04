@@ -18,4 +18,6 @@ Many sketches exist for the Arduino UNO, most of them only supporting a single r
 
 The challenge was for the interrupt service routines to invoke a C++ Class Member Function.  The solution chosen relies on virtual functions and friend classes used as described in the article [Interrupts in C++](http://www.embedded.com/design/prototyping-and-development/4023817/Interrupts-in-C-) by Alan Dorfmeyer and Pat Baird.
 
-Many other fun projects can be found at [coertvonk.com](http://www.coertvonk.com/technology/embedded).
+![Rotary encoder](schematic/schematic.svg)
+
+More projects can be found at [coertvonk.com](http://www.coertvonk.com/technology/embedded).
