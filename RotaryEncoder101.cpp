@@ -76,6 +76,10 @@ void Interrupt::registr(uint8_t const pinNr, Interrupt * intHandlerThis, uint32_
 				default: fnc = NULL;
 			}
 			if (fnc) {
+				PinDescription *p = &g_APinDescription[pinNr];
+				Serial.print("<");
+				Serial.print(p->ulGPIOType == SS_GPIO ? "GPIO" : "SS");
+				Serial.print(pinNr);  Serial.print(">");
 				attachInterrupt(pinNr, fnc, mode_);
 			}
 			break;
@@ -212,9 +216,9 @@ RotaryEncoderInterruptP::isr()
 	//interrupts();  not needed, 'cause caller already masked IRQ
 }
 
-RotaryEncoder::RotaryEncoder(uint8_t const pinP_,
-							 uint8_t const pinA_,
+RotaryEncoder::RotaryEncoder(uint8_t const pinA_,
 							 uint8_t const pinB_,
+							 uint8_t const pinP_,
 							 bool const lineair_)
 	: pinP(pinP_), pinA(pinA_), pinB(pinB_), lineair(lineair_)
 {

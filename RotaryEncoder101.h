@@ -18,7 +18,7 @@ class RotaryEncoder
 	RotaryEncoder(uint8_t const pinA_, uint8_t const pinB_, uint8_t const pinP_, bool const lineair_ = true);
 	void begin(void);
 
-      // return the current state
+	  // return the current state
 	encoderPos_t getPosition(void);
 	bool isPushed(void);
 
@@ -28,7 +28,7 @@ class RotaryEncoder
 	uint8_t const pinA;
 	uint8_t const pinB;
 	bool const lineair;
-    
+	
 	  // instantiated child classes
 	RotaryEncoderInterruptA * InterruptPtrA;
 	RotaryEncoderInterruptB * InterruptPtrB;
