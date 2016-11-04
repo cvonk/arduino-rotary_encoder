@@ -7,6 +7,8 @@ Features:
 
 * interrupt driven, no polling needed
 * allows for more than one instance
+* ignores spurious signals from encoder
+* lineair or non-lineair mode
 
 Assumptions:
 
