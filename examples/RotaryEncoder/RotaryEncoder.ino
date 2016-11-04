@@ -1,8 +1,8 @@
-// RotaryEncoderArduino101 library example
+// RotaryEncoder101 library example
 // IDE: Arduino 1.6.11
 // Board support pkg: Intel Curie Boards 1.0.7 (could work on other boards with sufficient IRQs)
-// Wiring: rotary encoder 1: common to ground, push to D4, rotary A on D5, rotary B on D6
-//         rotary encoder 2: common to ground, push to D7, rotary A on D8, rotary B on D9
+// Wiring: rotary encoder 1: common to ground, rotary A on D5, rotary B on D6, push to D7, 
+//         rotary encoder 2: common to ground, rotary A on D2, rotary B on D3, push to D4
 // (c) 2016 by Coert Vonk (http://www.coertvonk.com)
 // see enclosed LICENSE.txt
 
@@ -10,9 +10,10 @@
 
 uint8_t const nrEncoders = 2;
 
+// push must be on a pin that supports CHANGE interrupts
 RotaryEncoder rotEncoder[nrEncoders] = {
-	RotaryEncoder(4, 5, 6, false),
-	RotaryEncoder(7, 8, 9)
+	RotaryEncoder(5, 6, 7, false),
+	RotaryEncoder(4, 3, 2, false)
 };
 
 void setup()
