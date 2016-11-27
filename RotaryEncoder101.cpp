@@ -240,6 +240,12 @@ RotaryEncoder::getPosition(void)
 	return encoderPos;
 }
 
+void
+RotaryEncoder::setPosition(encoderPos_t const pos)
+{
+	encoderPos = pos;
+}
+
 bool
 RotaryEncoder::isPushed(void)
 {

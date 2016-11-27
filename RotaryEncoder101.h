@@ -20,6 +20,7 @@ class RotaryEncoder
 
 	  // return the current state
 	encoderPos_t getPosition(void);
+	void setPosition(encoderPos_t const pos);
 	bool isPushed(void);
 
   private:
