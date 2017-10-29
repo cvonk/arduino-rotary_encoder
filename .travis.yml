@@ -8,8 +8,8 @@ env:
     - SKETCH="RotaryEncoder" 
   matrix:
     - BOARD="Intel:arc32:arduino_101"
-      #- BOARD="arduino:avr:uno"
-      #- BOARD="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80"
+#   - BOARD="arduino:avr:uno"
+#   - BOARD="esp8266:esp8266:huzzah:FlashSize=4M3M,CpuFrequency=80"
 
 matrix:
   allow_failures:
