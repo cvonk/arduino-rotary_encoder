@@ -1,10 +1,10 @@
 # configuration file for Travis CI
-# 2016, Coert Vonk
+# 2016-2017, Coert Vonk
 
 language: generic
 env:
   global:
-    - IDE_VERSION=1.6.12
+    - IDE_VERSION=1.8.5
     - SKETCH="RotaryEncoder" 
   matrix:
     - BOARD="Intel:arc32:arduino_101"

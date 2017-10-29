@@ -1,5 +1,5 @@
 // RotaryEncoderArduino101 library example
-// IDE: Arduino 1.6.11
+// IDE: Arduino 1.8.5, 1.6.11
 // Board support pkg: Intel Curie Boards 1.0.7 (could work on other boards with sufficient IRQs)
 // Wiring: rotary encoder 1: common to ground, push to D4, rotary A on D5, rotary B on D6
 //         rotary encoder 2: common to ground, push to D7, rotary A on D8, rotary B on D9
