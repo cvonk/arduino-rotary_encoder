@@ -22,4 +22,4 @@ The challenge was for the interrupt service routines to invoke a C++ Class Membe
 
 ![Rotary encoder](schematic/schematic.png)
 
-More projects can be found at [coertvonk.com](http://www.coertvonk.com/technology/embedded).
+Similar Embedded C projects can be found at [coertvonk.com](http://coertvonk.com/category/sw/embedded).
