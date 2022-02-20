@@ -1,0 +1,9 @@
+{
+    "board": "Intel:arc32:arduino_101",
+    "port": "COM4",
+    "sketch": "arduino101.ino",
+    "output": "./build",
+    "buildPreferences": [
+        ["build.extra_flags", "-Wall"]
+    ]
+}
