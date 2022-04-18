@@ -5,7 +5,7 @@
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/cvonk/arduino-rotary_encoder)
 ![GitHub](https://img.shields.io/github/license/cvonk/ESP32_factory-ble-prov)
 
-##Using interrupts and allowing multiple instances
+## Using interrupts and allowing multiple instances
 
 This library supports rotary encoders connected to the Arduino/Genuino 101.  It should work for other microcontrollers for as long as they can generate the necessary interrupts.
 
