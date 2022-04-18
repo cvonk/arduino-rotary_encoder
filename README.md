@@ -1,9 +1,9 @@
 # Rotary Encoder for Arduino-101  
 
-[![Build Status](https://travis-ci.org/cvonk/arduino-rotary_encoder.svg?branch=master)](https://travis-ci.org/cvonk/arduino-rotary_encoder/)
-[![GitHub Discussions](https://img.shields.io/github/discussions/cvonk/arduino-rotary_encoder](https://github.com/cvonk/arduino-rotary_encoder/discussions)
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/cvonk/arduino-rotary_encoder)
-[![GitHub](https://img.shields.io/github/license/cvonk/ESP32_factory-ble-prov)
+![Build Status](https://travis-ci.org/cvonk/arduino-rotary_encoder.svg?branch=master)](https://travis-ci.org/cvonk/arduino-rotary_encoder/)
+![GitHub Discussions](https://img.shields.io/github/discussions/cvonk/arduino-rotary_encoder](https://github.com/cvonk/arduino-rotary_encoder/discussions)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/cvonk/arduino-rotary_encoder)
+![GitHub](https://img.shields.io/github/license/cvonk/ESP32_factory-ble-prov)
 
 ##Using interrupts and allowing multiple instances
 
